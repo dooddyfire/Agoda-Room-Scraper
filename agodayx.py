@@ -40,19 +40,19 @@ print(prop_desc)
 location = soup.find('div',{'class':'HeaderCerebrum__Location'}).text 
 print(location)
 
-room_name = soup.find('span',{'class':'MasterRoom__HotelName'}).text 
-print(room_name)
+room_name_lis = [ c.text.strip() for c in soup.find_all('span',{'data-selenium':'masterroom-title-name'}) ]
+print("\n".join(room_name_lis))
 
-price = soup.find('div',{'class':'StickyNavPrice__priceDetail--lowerText'}).text.replace('from','')
-print(price)
+price_lis = [ d.text.replace('from','').strip() for d in soup.find_all('strong',{'data-selenium':'PriceDisplay'})]
+print("\n".join(price_lis))
 
 df = pd.DataFrame()
 df['Hotel Name'] = [hotel_name] 
 df['Description'] = [prop_desc]
 df['Location'] = [location] 
-df['Room Name'] = [room_name] 
+df['Room Name'] = ["\n".join(room_name_lis)] 
 df['Check in'] = [check_in] 
 df['Check Out'] = [check_out] 
-df['Price'] = [price]
+df['Price'] = ["\n".join(price_lis)]
 
 df.to_excel('TestAgo.xlsx')
